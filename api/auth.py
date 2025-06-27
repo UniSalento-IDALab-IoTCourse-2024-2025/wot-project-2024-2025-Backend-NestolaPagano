@@ -32,7 +32,7 @@ async def register(user_data: UserRegister):
         "hashed_password": hashed_pw,
         "full_name": user_data.full_name,
         "registration_date": datetime.now(timezone.utc),
-        "connected_devices": []
+        "maintenance_urgency": None
     }
     result = await db.users.insert_one(new_user_doc)
     new_user_id = str(result.inserted_id)
@@ -46,7 +46,7 @@ async def register(user_data: UserRegister):
         email=user_data.email,
         full_name=user_data.full_name,
         registration_date=new_user_doc["registration_date"],
-        connected_devices=[]
+        maintenance_urgency=new_user_doc.get("maintenance_urgency"),
     )
     logger.info(f"Registration attempt: {user_data.full_name}")
     logger.info(f"Registration attempt: {user_data.email}")
@@ -86,7 +86,7 @@ async def login(creds: UserLogin):
         email=user_doc["email"],
         full_name=user_doc["full_name"],
         registration_date=user_doc["registration_date"],
-        connected_devices=user_doc.get("connected_devices", []),
+        maintenance_urgency=user_doc.get("maintenance_urgency"),
     )
 
     return TokenResponse(
@@ -161,5 +161,5 @@ async def change_password(
         email=updated["email"],
         full_name=updated["full_name"],
         registration_date=updated["registration_date"],
-        connected_devices=updated.get("connected_devices", []),
+        maintenance_urgency=updated.get("maintenance_urgency"),
     )

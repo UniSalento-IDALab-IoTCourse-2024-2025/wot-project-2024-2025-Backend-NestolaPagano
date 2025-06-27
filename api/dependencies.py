@@ -46,5 +46,5 @@ async def get_current_user(token: str = Depends(oauth2_scheme)) -> UserPublic:
         email=user_doc["email"],
         full_name=user_doc["full_name"],
         registration_date=user_doc["registration_date"],
-        connected_devices=user_doc.get("connected_devices", []),
+        maintenance_urgency=user_doc.get("maintenance_urgency"),
     )
