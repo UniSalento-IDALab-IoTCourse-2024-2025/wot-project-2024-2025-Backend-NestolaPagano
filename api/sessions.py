@@ -114,14 +114,10 @@ async def list_sessions(current_user: UserPublic = Depends(get_current_user)):
 @router.get("/{session_id}/behaviors", response_model=List[BehaviorCreate])
 async def get_behaviors(
     session_id: str,
-    current_user: UserPublic = Depends(get_current_user),
+    _current_user: UserPublic = Depends(get_current_user)
 ):
     db = await get_database()
     sid = ObjectId(session_id)
-
-    ses = await db.sessions.find_one({"_id": sid, "user_id": ObjectId(current_user.id)})
-    if not ses:
-        raise HTTPException(status_code=404, detail="Sessione non trovata")
     docs = await db.behaviors.find({"session_id": sid}).sort("timestamp", 1).to_list(length=None)
     return [
       BehaviorCreate(

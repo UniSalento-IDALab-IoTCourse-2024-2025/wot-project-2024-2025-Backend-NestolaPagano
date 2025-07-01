@@ -48,3 +48,7 @@ class TokenRefreshResponse(BaseModel):
 class ChangePasswordRequest(BaseModel):
     old_password: str
     new_password: str
+
+class UserAvgBehavior(BaseModel):
+    full_name: str
+    avg_behavior: float
